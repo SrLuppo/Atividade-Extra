@@ -1,3 +1,5 @@
+from PIL import Image
+import requests
 import streamlit as st
 import pandas as pd
 import os
@@ -35,30 +37,36 @@ def serializar_chat(mensagens):
     return base64.b64encode(json.dumps(mensagens_sem_figura).encode()).decode()
 
 
-def deserializar_chat(string_codificada):
-    """Converte a string da URL de volta para uma lista de mensagens."""
-    if not string_codificada:
-        return []
-    try:
-        mensagens_decodificadas = json.loads(
-            base64.b64decode(string_codificada.encode()).decode())
-        # Adiciona o campo 'figure' que removemos
-        for m in mensagens_decodificadas:
-            m['figure'] = None
-        return mensagens_decodificadas
-    except:
-        # Se a URL estiver corrompida, retorna um chat vazio
-        return []
-
-
-# --- Configuração da Página Streamlit ---
+##########################
+# --- VISUAL MELHORADO ---
+##########################
 st.set_page_config(
     page_title="Agente de Análise de CSV",
     page_icon="🤖",
     layout="wide"
 )
 
-st.title("🤖 Agente Autônomo para Análise de Dados em CSV")
+# Imagem de IA (Unsplash, domínio livre)
+img_url = "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80"
+try:
+    response = requests.get(img_url)
+    img = Image.open(BytesIO(response.content))
+except Exception:
+    img = None
+
+col1, col2 = st.columns([1, 5])
+with col1:
+    if img:
+        st.image(img, width=120, caption="Inteligência Artificial")
+    else:
+        st.markdown("<div style='height:120px'></div>", unsafe_allow_html=True)
+with col2:
+    st.markdown("<h1 style='margin-bottom:0;'>🤖 Agente Autônomo para Análise de Dados em CSV</h1>",
+                unsafe_allow_html=True)
+    st.markdown("<p style='color:gray;'>Aplicação interativa de IA para análise de dados tabulares.</p>",
+                unsafe_allow_html=True)
+
+st.markdown("---")
 st.write("Esta aplicação utiliza um agente de IA para responder perguntas sobre arquivos CSV.")
 
 # ... (O resto das suas funções e configurações permanece o mesmo) ...
