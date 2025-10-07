@@ -242,6 +242,5 @@ if st.session_state.google_api_key and st.session_state.df is not None:
 
         # ### MUDANÇA ###: Atualiza a URL novamente após a resposta do assistente
         st.query_params["chat"] = serializar_chat(st.session_state.messages)
-
 else:
     st.info("Por favor, configure a API Key e faça o upload de um arquivo CSV na barra lateral para começar.")
